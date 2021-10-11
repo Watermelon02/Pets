@@ -16,10 +16,10 @@ public class Create {
         getPriority();//随机设置宠物属性
         if(species == 1){//如果为猫
             Cat pet = new Cat(hp, hunger, cleanliness, mood, loveliness, sp, name);
-            coffee.getPets().add((Cat)pet);
+            coffee.getPets().add(pet);
         }else{
             Dog pet = new Dog(hp, hunger, cleanliness, mood, loveliness, sp, name);
-            coffee.getPets().add((Dog)pet);
+            coffee.getPets().add(pet);
         }
     }
 
