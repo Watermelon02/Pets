@@ -86,4 +86,8 @@ public class CoffeeShop{
     public synchronized void setTime(int time){
         this.time += time;
     }
+
+    public synchronized void setDay(int day){
+        this.day += day;
+    }
 }

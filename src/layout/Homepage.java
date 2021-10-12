@@ -1,9 +1,12 @@
 package layout;
 
+import java.io.File;
 import java.util.*;
 
 import CoffeeShop.CoffeeShop;
 import Bag.*;
+import Load.Load;
+import Save.Save;
 
 public class Homepage extends Page {
 
@@ -25,6 +28,8 @@ public class Homepage extends Page {
         System.out.println("3>宠物");
         System.out.println("4>营业");
         System.out.println("5>洗澡");
+        System.out.println("6>存档");
+        System.out.println("7>读档");
         System.out.println("e>退出");
         System.out.println("============================================================================");
         System.out.println("请输入选项");
@@ -64,12 +69,29 @@ public class Homepage extends Page {
                         e.printStackTrace();
                     }
                 }
+                case "6": {//保存功能
+                    try {
+                        new Save(super.getCoffeeShop(), super.getBag());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    new Homepage(super.getCoffeeShop(), super.getBag()).show();
+                }
+                case "7": {//读取功能
+                    try{
+                        new Load(super.getCoffeeShop(), super.getBag());//第三个参数为用户输入的存档序号
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    new Homepage(super.getCoffeeShop(), super.getBag()).show();
+                }
                 default: {
                     System.out.println("没有这个选项，请重新输入");
                     str = input.nextLine();
                 }
-
             }
         }
     }
 }
+
+

@@ -1,11 +1,11 @@
 package Shop;
 
-import Bag.*;
+import Bag.Bag;
 import CoffeeShop.CoffeeShop;
-import Shop.Goods.Foods;
-import Pets.*;
-import java.util.*;
-import layout.*;
+import Pets.Create;
+import layout.ShopPage;
+
+import java.util.Scanner;
 
 public class Shop {
     private Bag bag;
@@ -18,20 +18,19 @@ public class Shop {
 
     public synchronized void buyGoods(String name, int number) {
         float fee;// 购买花费的费用
-        fee = bag.add(name, number) * number;// 增加number个该物品并计算费用
+        fee = bag.addGood(name, number) * number;// 增加number个该物品并计算费用
         if (coffee.getMoney() >= fee) {
             coffee.setMoney(-fee);// 扣钱
             System.out.println("成功购买" + number + "个" + name);
             new ShopPage(coffee, bag).show();// 回到商店界面
         } else {
             try {
-                bag.readuce(name, number);
+                bag.reduce(name, number);
                 System.out.println("钱钱不够买" + number + "个" + name+"TvT");
                 new ShopPage(coffee, bag).show();
             } catch (Exception e) {
                 System.out.println(e);
             } finally {
-                ;
             }
         }
     }

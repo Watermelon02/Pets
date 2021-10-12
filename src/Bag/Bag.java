@@ -2,6 +2,7 @@ package Bag;
 
 import Shop.Goods.Foods;
 import Shop.Goods.Goods;
+import Shop.Goods.Keys;
 
 import java.util.ArrayList;
 
@@ -10,9 +11,7 @@ public class Bag {
     private ArrayList<Goods> bag = new ArrayList<Goods>();// 仓库物品动态数组
 
     public Bag(){
-        Foods food = new Foods();
-        bag.add(food);// 调用工厂类
-        bag.get(0).setNumber(10);
+        bag.add(new Keys());
     }
 
     public synchronized int search(String name) {// 仓库物品搜索功能,返回物品在数组中的索引
@@ -44,7 +43,7 @@ public class Bag {
 
     }
 
-    public synchronized float add(String name, int number) {// 新增物品功能,返回物品的价格，方便商店扣费
+    public synchronized float addGood(String name, int number) {// 新增物品功能,返回物品的价格，方便商店扣费
         float price;
         if (bag.get(search(name)) != null) {// 如果仓库里已经有该物品，增加该物品数量
             bag.get(search(name)).setNumber(number);// 增加该物品数量；
@@ -57,7 +56,7 @@ public class Bag {
         return price;
     }
 
-    public synchronized float readuce (String name, int number) throws Exception{// 减少物品功能,可用于商场贩卖道具，或是日常消耗道具；返回物品的价格，方便商店增加金钱
+    public synchronized float reduce(String name, int number) throws Exception{// 减少物品功能,可用于商场贩卖道具，或是日常消耗道具；返回物品的价格，方便商店增加金钱
         float price;
         if(bag.get(search(name)).getNumber() >= number){//如果该物品数量大于减少数量
             bag.get(search(name)).setNumber(-number);
@@ -71,8 +70,12 @@ public class Bag {
     public synchronized Goods factory(String name) {// 工厂类，当增加新商品时，修改此方法
         Goods goods = null;
         switch (name) {
-            case "Foods" -> {
+            case "foods" -> {
                 goods = new Foods();
+                break;
+            }
+            case "keys" -> {
+                goods = new Keys();
                 break;
             }
             default -> System.out.println("错误！！没有该物品类");

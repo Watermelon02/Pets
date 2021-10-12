@@ -1,6 +1,8 @@
 package Shop.Goods;
 
-public abstract class Goods {//定义商品模板
+import java.io.Serializable;
+
+public abstract class Goods implements Serializable {//定义商品模板
 
     private String name;
     private float price;

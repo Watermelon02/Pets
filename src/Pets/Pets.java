@@ -1,6 +1,8 @@
 package Pets;
 
-abstract public class Pets implements Comparable<Pets>{
+import java.io.Serializable;
+
+abstract public class Pets implements Comparable<Pets>, Serializable {
     private int hp;
     private int hunger;// 饥饿度
     private int cleanliness;// 清洁度
