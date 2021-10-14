@@ -23,6 +23,11 @@
 
 ## 日志：
 
+#### **版本v 0.3.1**
+
+- 为存档增加了保存时间（将coffeeShop中的time和day写入到time.txt;将存档保存时间写入date.txt,运用了*SimpleDataFormate*）
+- 优化了商店和背包功能，修掉了之前没发现的的bug
+
 #### 	版本v 0.3.0
 
 - 实现了保存/读取功能

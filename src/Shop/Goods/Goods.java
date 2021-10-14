@@ -18,7 +18,7 @@ public abstract class Goods implements Serializable {//定义商品模板
         this.number += number;
     }
 
-    public  String getName() {
+    public String getName() {
         return this.name;
     }
 

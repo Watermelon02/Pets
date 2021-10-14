@@ -16,7 +16,7 @@ public class Shop {
         this.coffee = coffee;
     }
 
-    public synchronized void buyGoods(String name, int number) {
+    public synchronized void buyGoods(String name, int number) {//通过背包中的addGood方法来实现
         float fee;// 购买花费的费用
         fee = bag.addGood(name, number) * number;// 增加number个该物品并计算费用
         if (coffee.getMoney() >= fee) {
@@ -26,11 +26,10 @@ public class Shop {
         } else {
             try {
                 bag.reduce(name, number);
-                System.out.println("钱钱不够买" + number + "个" + name+"TvT");
+                System.out.println("钱钱不够买" + number + "个" + name + "TvT");
                 new ShopPage(coffee, bag).show();
             } catch (Exception e) {
                 System.out.println(e);
-            } finally {
             }
         }
     }
