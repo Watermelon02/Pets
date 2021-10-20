@@ -3,20 +3,18 @@ package Shop;
 import Bag.Bag;
 import CoffeeShop.CoffeeShop;
 import Pets.Create;
-import layout.ShopPage;
+import Layout.ShopPage;
 
 import java.util.Scanner;
 
-public class Shop {
-    private Bag bag;
-    private CoffeeShop coffee;
+public class Shop {//实现了单例设计模式
+    private static Shop shop = new Shop();
 
-    public Shop(CoffeeShop coffee, Bag bag) {// 构造方法接收商店中的金钱和背包对象，在购买商品后返回剩余的金钱
-        this.bag = bag;
-        this.coffee = coffee;
+    public static Shop getInstance() {
+        return shop;
     }
 
-    public synchronized void buyGoods(String name, int number) {//通过背包中的addGood方法来实现
+    public synchronized void buyGoods(String name, int number, CoffeeShop coffee, Bag bag) throws Exception{//通过背包中的addGood方法来实现
         float fee;// 购买花费的费用
         fee = bag.addGood(name, number) * number;// 增加number个该物品并计算费用
         if (coffee.getMoney() >= fee) {
@@ -34,7 +32,7 @@ public class Shop {
         }
     }
 
-    public synchronized void buyPets(int species) {
+    public synchronized void buyPets(int species, CoffeeShop coffee, Bag bag) throws Exception{
         if (coffee.getMoney() >= 100) {
             System.out.println("");
             System.out.println("请给这只" + (species == 1 ? "猫猫" : "狗狗") + "起一个新名字");

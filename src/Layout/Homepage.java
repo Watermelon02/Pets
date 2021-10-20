@@ -1,6 +1,5 @@
-package layout;
+package Layout;
 
-import java.io.File;
 import java.util.*;
 
 import CoffeeShop.CoffeeShop;
@@ -14,7 +13,7 @@ public class Homepage extends Page {
         super(coffee, bag);
     }
 
-    public synchronized void show() {// 展示主页界面，提供选项返回上一界面（主界面）
+    public synchronized void show() throws Exception{// 展示主页界面，提供选项返回上一界面（主界面）
         System.out.println();
         System.out.println("============================================================================");
         System.out.println("                             ¥ 咖啡店 ¥");
@@ -36,7 +35,7 @@ public class Homepage extends Page {
         get();
     }
 
-    public void get() {// 获取用户输入,根据输入显示下一界面
+    public void get() throws Exception{// 获取用户输入,根据输入显示下一界面
 
         Scanner input = new Scanner(System.in);
         String str = input.nextLine();

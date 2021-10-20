@@ -3,9 +3,8 @@ import CoffeeShop.CoffeeShop;
 import Load.Load;
 import Pets.Cat;
 import Pets.Pets;
-import layout.Homepage;
+import Layout.Homepage;
 
-import java.io.File;
 import java.util.Scanner;
 
 public class Main {
@@ -27,7 +26,7 @@ public class Main {
         }
     }
 
-    public static void newGame() {
+    public static void newGame() throws Exception{
         Pets firstPet = new Cat(10, 10, 10, 10, 8, 8, "default");//默认第一只宠物
         System.out.println("欢迎来到你的新店，为你的第一只宠物取个名字吧");
         Scanner scanner = new Scanner(System.in);

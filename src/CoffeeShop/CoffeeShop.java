@@ -5,7 +5,7 @@ import Action.Eater;
 import Pets.Pets;
 import Action.Washer;
 import Action.Worker;
-import layout.Homepage;
+import Layout.Homepage;
 
 import java.util.ArrayList;
 import java.util.Scanner;

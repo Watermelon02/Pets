@@ -1,11 +1,10 @@
 package Save;
-
 import Bag.Bag;
 import CoffeeShop.CoffeeShop;
-import layout.Homepage;
-import layout.Page;
-
+import Databases.Connector;
+import Layout.Homepage;
 import java.io.*;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -13,99 +12,66 @@ import java.util.Scanner;
 public class Save {
     private static CoffeeShop coffee;
     private static Bag bag;
-    private File current = new File(this.getClass().getResource(File.separator).getPath() + File.separator + "Save" + File.separator + "Archives");//当前文件
-    private static String path;
 
     public Save(CoffeeShop coffee, Bag bag) throws Exception {
         this.coffee = coffee;
         this.bag = bag;
 
-        if (current.listFiles().length > 0) {//如果存档位不为空,输出存档的名字和保存时间
-            System.out.println("有以下存档");
-            for (File file : current.listFiles()) {
-                if(file.isDirectory()){
-                    char c[] = new char[1024];
-                    int len = 0;
-                    len = new InputStreamReader(new FileInputStream(new File(file.getPath() + File.separator + "date.txt"))).read(c);//获取存档保存时的时间
-                    System.out.println(new StringBuilder().append("存档:").append(file.getName()).append("；存储时间:").append(new String(c, 0, len)).toString());//输出存档名和存档时间
-                }
-            }
+        Connection connection = new Connector("root", "ai1wei2xi3").getConnection();//获得数据库connection实例
+
+        int total = 0;//总存档数
+        ResultSet rs = connection.createStatement().executeQuery("SELECT id,date FROM petscoffee");//输出已有存档编号及存档时间
+        System.out.println("有以下存档");
+        while (rs.next()) {
+            System.out.println("存档：" + rs.getInt(1) + "  存档时间：" + rs.getString(2));
+            total++;
         }
 
         System.out.println("请输入要保存的存档序号");
-        path = current.getPath() + File.separator + new Scanner(System.in).next();//初始化存档路径
+        int position = new Scanner(System.in).nextInt();
 
-        if (new File(path).exists()) {
+        if (position <= total) {
             System.out.println("确认覆盖该存档？1>yes/2>no");
             if (new Scanner(System.in).nextInt() == 1) {
-                boolean i=new File(path + File.separator + "time.txt").delete();
-                new File(path + File.separator + "date.txt").delete();
-                new File(path + File.separator + "money.txt").delete();
-                new File(path + File.separator + "pets.txt").delete();
-                new File(path + File.separator + "bag.txt").delete();
-                new File(path).delete();//先删除原来的数据
-                new File(path).mkdir();//再重新保存所有数据
-                saveTime();
-                saveBag();
-                savePets();
-                saveMoney();
-                saveDate();
+                saveAll(connection);
                 System.out.println("进度保存中ing");
                 System.out.println();
             } else {
                 System.out.println("正在返回主页");
-                Thread.sleep(1000);
             }
         } else {
             System.out.println("创建新存档ing");
-            new File(path).mkdir();
-            saveDate();
-            saveBag();
-            savePets();
-            saveMoney();
-            saveTime();
-            Thread.sleep(1000);
+            saveAll(connection);
             System.out.println("进度已保存");
         }
         new Homepage(coffee, bag).show();
     }
 
-    public void saveTime() throws Exception {//保存游戏中的day和time属性
-        int date[] = {coffee.getDay(), coffee.getTime()};
-        File file = new File(path + File.separator + "time.txt");
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-        oos.writeObject(date);
-        oos.close();
-    }
-
-    public void saveMoney() throws Exception {
-        File file = new File(path + File.separator + "money.txt");
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-        oos.writeObject((Object) coffee.getMoney());
-        oos.close();
-    }
-
-    public void savePets() throws Exception {
-        File file = new File(path + File.separator + "pets.txt");
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+    public void saveAll(Connection connection) throws Exception {
+        PreparedStatement pstmt = connection.prepareStatement("INSERT INTO petscoffee(day,time,money,pets,bag,date) VALUE(?,?,?,?,?,?)");
+        pstmt.setInt(1, coffee.getDay());//保存day
+        pstmt.setInt(2, coffee.getTime());//保存time
+        pstmt.setFloat(3, coffee.getMoney());//保存money
+        //以下保存pets[]
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject((Object[]) coffee.getPets().toArray());
-        oos.close();
-    }
-
-    public void saveBag() throws Exception {
-        File file = new File(path + File.separator + "bag.txt");
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+        byte[] data = baos.toByteArray();
+        pstmt.setBytes(4, data);
+        //以下保存goods[]
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
         oos.writeObject((Object[]) bag.getBag().toArray());
-        oos.close();
-    }
-
-    public void saveDate() throws Exception {//保存存档时的时间
-        File file = new File(path + File.separator + "date.txt");
+        data = baos.toByteArray();
+        pstmt.setBytes(5, data);
+        //以下保存存档时间
         String pattern = "yyyy年MM月dd日HH时mm分ss秒";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        String str = sdf.format(new Date());
-        PrintStream ps =  new PrintStream(new FileOutputStream(file));
-        ps.println(str);
-        ps.close();
+        String str = sdf.format(new Date());//时间字符串
+        pstmt.setString(6,str);
+        pstmt.executeUpdate();
+        oos.close();
+        baos.close();
+        pstmt.close();
     }
 }

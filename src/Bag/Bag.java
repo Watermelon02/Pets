@@ -43,7 +43,7 @@ public class Bag {
         }
     }
 
-    public synchronized float addGood(String name, int number) {// 新增物品功能,返回物品的价格，方便商店扣费
+    public synchronized float addGood(String name, int number) throws Exception{// 新增物品功能,返回物品的价格，方便商店扣费
         float price;
         int index = search(name);//search查找物品是否存在，如果存在返回其序号
         if (index != -1) {// 如果仓库里已经有该物品，增加该物品数量
@@ -69,20 +69,10 @@ public class Bag {
         return price;
     }
 
-    public synchronized Goods factory(String name) {// 工厂类，当增加新商品时，修改此方法
+    public synchronized Goods factory(String name) throws Exception{// 工厂类，当增加新商品时，修改此方法
         Goods goods = null;
-        switch (name) {
-            case "Foods" -> {
-                goods = new Foods();
-                break;
-            }
-            case "Keys" -> {
-                goods = new Keys();
-                break;
-            }
-            default -> System.out.println("错误！！没有该物品类");
-        }
-        return goods;//
+        goods = (Goods) Class.forName("Shop.Goods."+name).getConstructor().newInstance();
+        return goods;
     }
 
     public synchronized int getSize() {

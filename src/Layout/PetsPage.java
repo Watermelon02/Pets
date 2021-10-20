@@ -1,4 +1,4 @@
-package layout;
+package Layout;
 
 import Bag.Bag;
 import CoffeeShop.CoffeeShop;
@@ -12,7 +12,7 @@ public class PetsPage extends Page {
         super(coffee, bag);
     }
 
-    public void show() {// 宠物界面
+    public void show() throws Exception{// 宠物界面
         System.out.println();
         System.out.println("============================================================================");
         System.out.println("                            0v0 宠物 (๑•̀ㅂ•́)و✧");

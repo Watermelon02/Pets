@@ -1,4 +1,4 @@
-package layout;
+package Layout;
 
 import Bag.*;
 import CoffeeShop.*;
@@ -13,15 +13,15 @@ public abstract class Page {
         this.coffee = coffee;
     }
 
-    public abstract void show();//显示该界面
+    public abstract void show() throws Exception;//显示该界面
 
-    public synchronized void back(CoffeeShop coffee, Bag bag){//返回主界面
+    public synchronized void back(CoffeeShop coffee, Bag bag) throws Exception{//返回主界面
         Homepage homepage = new Homepage(coffee, bag);
         homepage.show();
         homepage.get();
     }
 
-    public void get(){//获取用户输入功能
+    public void get() throws Exception{//获取用户输入功能
         Scanner input = new Scanner(System.in);
         String str = input.nextLine();
         while(str != "e"){

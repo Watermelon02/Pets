@@ -1,4 +1,4 @@
-package layout;
+package Layout;
 
 import Bag.Bag;
 import CoffeeShop.CoffeeShop;
@@ -8,7 +8,7 @@ public class BagPage extends Page {
         super(coffee, bag);
     }
 
-    public void show() {// 仓库界面
+    public void show() throws Exception{// 仓库界面
         System.out.println();
         System.out.println("============================================================================");
         System.out.println("                             o 仓库 o");

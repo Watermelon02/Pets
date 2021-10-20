@@ -1,31 +1,34 @@
-package layout;
+package Layout;
 
 import CoffeeShop.CoffeeShop;
 import Shop.*;
 import Bag.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.*;
 public class ShopPage extends Page{
-    private Shop shop = new Shop(super.getCoffeeShop(), super.getBag());//实例化商店对象，以调用其功能
+    private Shop shop = Shop.getInstance();//实例化商店对象，以调用其功能
 
     public ShopPage(CoffeeShop coffee, Bag bag){
         super(coffee,bag);
     }
-    public void show(){//商店界面
+    public void show() throws Exception {//商店界面
+        Properties pro = new Properties();
+        File f = new File("/Users/xigua/Desktop/PetsCoffee/src/Layout/goods.properties");//保存商店界面展示的货物信息路径
+        try{
+            pro.load(new FileInputStream(f));//读取properties文件
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         System.out.println();
         System.out.println("============================================================================");
         System.out.println("                             $ 商店 $");
         System.out.println("----------------------------------------------------------------------------");
-        System.out.println("1>Foods");//第一项商品foods
-        System.out.println("$:5");
-        System.out.println("宠物们的食物，宠物每天会消耗食物来补充饥饿度");
-        System.out.println("----------------------------------------------------------------------------");
-        System.out.println("2>Cat");
-        System.out.println("$:2000");
-        System.out.println("领养一只新的猫猫，更多宠物，更多毛毛，更多钱钱");
-        System.out.println("----------------------------------------------------------------------------");
-        System.out.println("3>Dog");
-        System.out.println("$:2000");
-        System.out.println("领养一只新的狗狗，更多宠物，更多毛毛，更多钱钱");
+        for (int i = 1;i< pro.size()+1;i++){
+            System.out.println(String.valueOf(i)+">"+pro.getProperty(String.valueOf(i)));//输出properties中的商品信息
+        }
         System.out.println("----------------------------------------------------------------------------");
         System.out.println("============================================================================");
         System.out.println();
@@ -34,23 +37,23 @@ public class ShopPage extends Page{
         get();// 获取输入
     }
 
-    public void get(){//获取用户输入功能
+    public void get() throws Exception{//获取用户输入功能
         Scanner input = new Scanner(System.in);
         String str = input.nextLine();
-        while(str != "e"){
+        while(!str.equals("e")){
             switch(str){
                 case "1":{//买食物
                     System.out.println("请输入想要购买的数量：");
                     int number = input.nextInt();
-                    shop.buyGoods("Foods", number);
+                    shop.buyGoods("Foods", number,super.getCoffeeShop(),super.getBag());
                     break;
                 }
                 case "2":{//买猫猫
-                    shop.buyPets(1);
+                    shop.buyPets(1,super.getCoffeeShop(),super.getBag());
                     break;
                 }
                 case "3":{//买狗狗
-                    shop.buyPets(2);
+                    shop.buyPets(2,super.getCoffeeShop(),super.getBag());
                     break;
                 }
                 case "b":{
